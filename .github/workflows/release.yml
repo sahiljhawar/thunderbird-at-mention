@@ -1,8 +1,12 @@
 name: Release
 
+# Publishes a GitHub release whenever the version in manifest.json changes on main
+# (and the release for that version does not exist yet). The release creates the tag.
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths: [manifest.json]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,22 +21,43 @@ jobs:
         with:
           node-version: 22
 
-      - name: Tag matches manifest version
-        run: |
-          version="$(node -p "require('./manifest.json').version")"
-          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match manifest version $version" >&2
-            exit 1
-          fi
-
-      - run: npm test
-
-      - run: npm run package
-
-      - name: Publish release
+      - name: Version and existing release
+        id: version
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*.xpi \
-            --title "$GITHUB_REF_NAME" \
+          version="$(node -p "require('./manifest.json').version")"
+          package_version="$(node -p "require('./package.json').version")"
+          if [ "$version" != "$package_version" ]; then
+            echo "manifest.json ($version) and package.json ($package_version) disagree" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "Release v$version already exists, nothing to publish."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Lint
+        if: steps.version.outputs.publish == 'true'
+        run: npm run lint
+
+      - name: Unit tests
+        if: steps.version.outputs.publish == 'true'
+        run: npm test
+
+      - name: Package
+        if: steps.version.outputs.publish == 'true'
+        run: npm run package
+
+      - name: Publish release
+        if: steps.version.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" dist/*.xpi \
+            --target "$GITHUB_SHA" \
+            --title "v${{ steps.version.outputs.version }}" \
             --generate-notes

@@ -93,9 +93,10 @@ fills the address book, opens compose windows and checks the dropdown, the To an
 body and the message that is sent. With `E2E_SHOT=docs/dropdown.png` it also saves a screenshot.
 CI runs it against Thunderbird release, ESR and ESR 128.
 
-To release, bump `version` in `manifest.json` and `package.json`, commit, and push a tag
-`v<version>`. The release workflow checks the tag against the manifest, runs the tests and
-attaches the `.xpi`.
+To release, bump `version` in `manifest.json` and `package.json` and push to `main`. The release
+workflow sees the new version, runs the lint and tests, then creates the tag `v<version>` and a
+GitHub release with the `.xpi` attached. If a release for that version already exists it does
+nothing. It can also be started by hand from the Actions tab.
 
 ## License
 
