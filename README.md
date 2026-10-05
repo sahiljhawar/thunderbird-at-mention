@@ -52,8 +52,8 @@ Notes on installing:
 3. Use `@@` in place of `@` to add to **Cc** instead.
 
 If you use the [Markdown Compose Preview](https://github.com/sahiljhawar/thunderbird-markdown-preview)
-add-on, mentions are sent as links labelled with the name. This needs a version of that add-on
-newer than 1.2.1, which added support for links with their own label.
+add-on, mentions are sent as links labelled with the name. This needs version 1.2.2 or newer of
+that add-on.
 
 ## What it does not do
 
