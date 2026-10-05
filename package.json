@@ -1,0 +1,25 @@
+{
+  "name": "thunderbird-at-mention",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Type @ in the Thunderbird compose window to add a contact to To, or @@ to add one to Cc",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "lint": "node --check background.js && node --check compose.js && node --check lib/core.js && node --check lib/contacts.js && node --check scripts/marionette.mjs && node --check tests/e2e/run.mjs",
+    "package": "bash scripts/package.sh",
+    "e2e": "node tests/e2e/run.mjs"
+  },
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahiljhawar/thunderbird-at-mention.git"
+  },
+  "homepage": "https://github.com/sahiljhawar/thunderbird-at-mention#readme",
+  "bugs": {
+    "url": "https://github.com/sahiljhawar/thunderbird-at-mention/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

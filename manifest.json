@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "@Mention Recipients",
+  "short_name": "@Mention",
+  "version": "1.0.0",
+  "description": "Type @ in the compose window to add a contact to To, or @@ to add one to Cc, from a dropdown that follows what you type.",
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "at-mention@jhawar.local",
+      "strict_min_version": "128.0"
+    }
+  },
+  "permissions": ["addressBooks", "compose"],
+  "background": {
+    "scripts": ["background.js"],
+    "type": "module"
+  },
+  "homepage_url": "https://github.com/sahiljhawar/thunderbird-at-mention"
+}
